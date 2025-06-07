@@ -25,7 +25,7 @@ Esta aplicación móvil permite gestionar una concesionaria de vehículos, inclu
 
 1. Clonar el repositorio:
 ```bash
-git clone 
+git clone [url-del-repositorio]
 cd app_vehiculos
 ```
 
