@@ -1,0 +1,105 @@
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import '../models/brand_model.dart';
+import '../models/model_model.dart';
+import '../models/vehicle_model.dart';
+import '../services/brand_service.dart';
+import '../services/model_service.dart';
+import '../widgets/add_brand_dialog.dart';
+import '../widgets/add_model_dialog.dart';
+import 'vehicle_helpers.dart';
+
+class AddVehicleScreenHelpers {
+  /// Carga las marcas y el vehículo inicial
+  static Future<void> loadInitialData({
+    required BuildContext context,
+    required Vehicle? vehicle,
+    required TextEditingController nameCtrl,
+    required TextEditingController plateCtrl,
+    required TextEditingController colorCtrl,
+    required TextEditingController yearCtrl,
+    required BrandService brandService,
+    required ModelService modelService,
+    required Function(List<Brand>) onBrandsLoaded,
+    required Function(List<VehicleModel>, VehicleModel, Brand) onModelAndBrandLoaded,
+  }) async {
+    try {
+      // Primero cargamos todas las marcas
+      final brands = await VehicleHelpers.loadBrands(context, brandService);
+      onBrandsLoaded(brands);
+
+      if (vehicle != null) {
+        // Si estamos editando, cargamos los datos del vehículo
+        nameCtrl.text = vehicle.name;
+        plateCtrl.text = vehicle.plate;
+        colorCtrl.text = vehicle.color;
+        yearCtrl.text = vehicle.year.toString();
+
+        try {
+          // Cargamos los modelos de la marca correspondiente      final models = await modelService.getModels(brandId: vehicle.modelId);
+          if (models.isEmpty) {
+            throw Exception('No se encontraron modelos para el vehículo');
+          }
+          final model = models.first;
+          final brand = brands.firstWhere(
+            (b) => b.id == model.brandId,
+            orElse: () => throw Exception('Marca no encontrada'),
+          );
+          onModelAndBrandLoaded(models, model, brand);
+        } catch (e) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Error al cargar modelo o marca: $e')),
+            );
+          }
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        VehicleHelpers.showErrorSnackBar(
+          context, 
+          'Error al cargar datos iniciales: $e'
+        );
+      }
+    }
+  }
+
+  /// Permite seleccionar una imagen desde la galería
+  static Future<File?> pickImage() async {
+    try {
+      final picker = ImagePicker();
+      final picked = await picker.pickImage(source: ImageSource.gallery);
+      return picked != null ? File(picked.path) : null;
+    } catch (e) {
+      print('Error al seleccionar imagen: $e');
+      return null;
+    }
+  }
+
+  /// Abre el diálogo para agregar una nueva marca
+  static Future<Brand?> addNewBrand({
+    required BuildContext context,
+    required BrandService brandService,
+  }) async {
+    return await showDialog<Brand>(
+      context: context,
+      builder: (context) => AddBrandDialog(brandService: brandService),
+    );
+  }
+
+  /// Abre el diálogo para agregar un nuevo modelo
+  static Future<VehicleModel?> addNewModel({
+    required BuildContext context,
+    required ModelService modelService,
+    required Brand selectedBrand,
+  }) async {
+    return await showDialog<VehicleModel>(
+      context: context,
+      builder: (context) => AddModelDialog(
+        modelService: modelService,
+        brand: selectedBrand,
+      ),
+    );
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "793627216817",
+    "project_id": "app-vehiculos-b4259",
+    "storage_bucket": "app-vehiculos-b4259.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:793627216817:android:de900c99f843852b91cb90",
+        "android_client_info": {
+          "package_name": "com.example.app_vehiculos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "793627216817-ikmbvfhnre8p4iqbaqgtgpb40dq1atq6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.app_vehiculos",
+            "certificate_hash": "1bbefab5af890bd3735f702dacb55a77d5993a6e"
+          }
+        },
+        {
+          "client_id": "793627216817-7suffsibdbip0le0ehvq8q3tj051tt18.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBp32ix3tUU6UCnxXpa6sb7jopaJ99LL1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "793627216817-7suffsibdbip0le0ehvq8q3tj051tt18.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "793627216817-7cic9sa2s06etgia3iur3f53d401mvnt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.appVehiculos"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
